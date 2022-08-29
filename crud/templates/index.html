@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<title>My Task</title>
+<body class="task">
+    <h2>Register Your Task</h2>
+
+    <div class='form'>
+        <form method="post" class='regi_task'>
+            {% csrf_token %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 py-2">
+                        {{f.task|as_crispy_field}}
+                    </div>
+
+                    <div class='col-md-2 py-5'>
+                        {{f.complete|as_crispy_field}}
+                    </div>
+
+                    <div class='col-md-2 py-2'>
+                        <button type="submit" value='submit'>Add</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <h2 class='task_head'>My Task List</h2>
+    {% if user.is_authenticated %}
+    <div>
+    
+    <table class='tab'>
+        
+            
+            <tr>
+                <th>Task</th>
+                <th>Created On</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            {% for i in w %}
+            {% if i.complete == True %}
+            
+            <tr>
+            <td><s>{{i.task }}</s></td>
+            <td>{{i.created}}</td>
+            {% else %}
+            <td> {{i.task}} </td>
+            <td>{{i.created}}</td>
+            {% endif %}
+            <td><a href="{% url 'update' i.id %}" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i> Edit</a></td>
+            <td><a href="{% url 'delet' i.id %}" class="btn btn-danger">Remove <i class="fa-solid fa-trash-can"></i></a></td>
+            </tr>
+            
+            {% endfor %} 
+    </table>
+    </div>
+    {% else %}
+    <h2>No Data Found, Please Login First</h2>
+    {% endif %}
+</body>
+{% endblock content %}
